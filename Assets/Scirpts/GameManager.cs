@@ -5,14 +5,13 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    
-
     [Header("À¯´Ö Á¤º¸")]
     [SerializeField] GameObject[] unitPrefab;
+    [SerializeField] GameObject[] characterPrefab;
     [SerializeField] Tilemap floorTileMap;
-
+    List<Unit> characters;
     DoorControll dc;
-
+    
     public Tilemap GetTileMap()
     {
         return floorTileMap;
@@ -21,12 +20,10 @@ public class GameManager : Singleton<GameManager>
     #region MonoBeHavior
     private void Awake()
     {
+        characters = new List<Unit>();
         dc = FindObjectOfType<DoorControll>();
     }
 
-    
-
-    
     #endregion
 
 
@@ -36,7 +33,45 @@ public class GameManager : Singleton<GameManager>
         return unitPrefab[idx];
     }
 
+    public GameObject GetCharacterPrefab(int idx)
+    {
+        return characterPrefab[idx];
+    }
 
+    public Unit GetIdxCharacter(int idx)
+    {
+        return characters[idx];
+    }
+
+    public void AddPositionList(Unit unit)
+    {
+        characters.Add(unit);
+    }
+
+    public int FindPosition(Unit unit)
+    {
+        int check = characters.FindIndex((values) =>
+        {
+            return unit == values;
+        });
+
+        return check;
+    }
+
+    public void RemoveUnitPosition(int index)
+    {
+        characters.RemoveAt(index);
+    }
+
+    public int GetUnitPosIndex()
+    {
+        return characters.Count - 1;
+    }
+
+    public Vector3 GetUnitPos(int index)
+    {
+        return characters[index].gameObject.transform.position;
+    }
     #endregion
 
 

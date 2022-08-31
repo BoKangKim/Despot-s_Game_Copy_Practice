@@ -11,6 +11,9 @@ public class MouseControll : Singleton<MouseControll>
     public bool IsDrag { get; set; } = false;
     public bool IsClicked { get; set; } = false;
     public bool MatchUnitClass { get; set; } = false;
+    public int UnitPosIdx { get; set; } = -1;
+    public UnitClass ClickedUnitClass { get; set; } = null;
+
     int clickCount = 0;
 
     private void Awake()
@@ -56,5 +59,18 @@ public class MouseControll : Singleton<MouseControll>
     public Camera GetCamera()
     {
         return myCamera;
+    }
+
+    public Vector3 GetUnitPos()
+    {
+        if(UnitPosIdx != -1)
+        {
+            
+            return GameManager.Instance.GetUnitPos(UnitPosIdx);
+        }
+        else
+        {
+            return new Vector3(-1000,0,0);
+        }
     }
 }
