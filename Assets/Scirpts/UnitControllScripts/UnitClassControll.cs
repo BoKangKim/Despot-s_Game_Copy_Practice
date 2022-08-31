@@ -22,6 +22,8 @@ public class UnitClassControll : MonoBehaviour
 
             obj.gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(new Vector3Int(4 + i + count, 1));
             obj.gameObject.SetActive(true);
+            UnitClass uc = obj.GetComponent<UnitClass>();
+            uc.MyIndex = i;
             units.Add(obj);
             count++;
         }
