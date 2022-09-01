@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void SetClicked(int mouse);
+public delegate void Matched();
 public class MouseControll : Singleton<MouseControll>
 {
     [Header("마우스 정보")]
@@ -10,25 +12,55 @@ public class MouseControll : Singleton<MouseControll>
     public Vector3 mousePos {get; set;} = Vector3.zero;
     public bool IsDrag { get; set; } = false;
     public bool IsClicked { get; set; } = false;
-    public bool MatchUnitClass { get; set; } = false;
-    public int UnitPosIdx { get; set; } = -1;
     public UnitClass ClickedUnitClass { get; set; } = null;
-
+    public Unit MatchUnit { get; set; } = null;
+    public bool IsClassMatch { get; set; } = false;
+    public bool IsMove { get; set; } = false;
     int clickCount = 0;
+    public SetClicked setClicked = null;
+    public Matched Match = null;
 
     private void Awake()
     {
         Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
     }
 
-    private void OnMouseDown()
-    {
-        if(IsClicked == false && clickCount == 0)
-            IsClicked = true;
+    // X Max -5
+    // X Min -11.5
 
-        clickCount++;
-        TransferMousePos();
+
+    // Y Max 2.5
+    // Y Min -4.5
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (IsClicked == false && clickCount == 0)
+                IsClicked = true;
+
+            clickCount++;
+            TransferMousePos();
+            if(setClicked != null)
+                setClicked(0);
+        }
+        else if (Input.GetMouseButtonDown(1))
+        {
+            if (MatchUnit != null && IsMove == false)
+            {
+                TransferMousePos();
+                
+                if (mousePos.x <= -5.5f && mousePos.x >= -11.5f
+                    && mousePos.y >= -4.5f && mousePos.y <= 2.5f)
+                {
+                    IsMove = true;
+                    StartCoroutine(MatchUnit.MoveToTarget());
+                }
+            }
+
+        }
     }
+
 
     private void OnMouseDrag()
     {
@@ -47,6 +79,14 @@ public class MouseControll : Singleton<MouseControll>
         IsClicked = false;
         clickCount = 0;
         IsDrag = false;
+        
+        if(IsClassMatch == true)
+        {
+            mousePos = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(mousePos));
+            if(Match != null)
+                Match();
+        }
+
     }
 
     public void TransferMousePos()
@@ -63,14 +103,22 @@ public class MouseControll : Singleton<MouseControll>
 
     public Vector3 GetUnitPos()
     {
-        if(UnitPosIdx != -1)
+        if(MatchUnit != null)
         {
             
-            return GameManager.Instance.GetUnitPos(UnitPosIdx);
+            return MatchUnit.gameObject.transform.position;
         }
         else
         {
             return new Vector3(-1000,0,0);
         }
+    }
+
+    private void OnDestroy()
+    {
+        ClickedUnitClass = null;
+        MatchUnit = null;
+        setClicked = null;
+        Match = null;
     }
 }

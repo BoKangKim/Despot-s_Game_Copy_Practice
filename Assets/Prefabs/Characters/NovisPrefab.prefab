@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7793593857691472806}
   - component: {fileID: 6290226411168811279}
   - component: {fileID: 910546958796105376}
+  - component: {fileID: 1672863783}
   m_Layer: 8
   m_Name: NovisPrefab
   m_TagString: Untagged
@@ -132,3 +133,15 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.07, y: 0.18}
   m_EdgeRadius: 0
+--- !u!114 &1672863783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4468914671922582541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a59d5ec8c9cf2429b184de5ca83e64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 317165174930353479}
   - component: {fileID: 7703318196414628782}
   - component: {fileID: 4876359436740124981}
+  - component: {fileID: 5129057522319494299}
   m_Layer: 0
   m_Name: CBroadSwordPrefab
   m_TagString: Untagged
@@ -105,3 +106,15 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &5129057522319494299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2968477536047007090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a59d5ec8c9cf2429b184de5ca83e64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

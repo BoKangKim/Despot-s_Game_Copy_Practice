@@ -28,6 +28,7 @@ public class UnitClass : MonoBehaviour
             gameObject.transform.position = MouseControll.Instance.mousePos;
 
             isMatched = true;
+            MouseControll.Instance.IsClassMatch = true;
             MouseControll.Instance.IsClicked = false;
         }
         else if (isMatched == true 
@@ -40,13 +41,9 @@ public class UnitClass : MonoBehaviour
             && MouseControll.Instance.IsDrag == false)
         {
             gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(gameObject.transform.position));
-
             if(gameObject.transform.position == MouseControll.Instance.GetUnitPos())
             {
-                Destroy(gameObject);
-                Destroy(GameManager.Instance.GetIdxCharacter(MouseControll.Instance.UnitPosIdx).gameObject);
-                Instantiate(GameManager.Instance.GetCharacterPrefab(MyIndex),MouseControll.Instance.GetUnitPos(),Quaternion.identity);
-                MouseControll.Instance.UnitPosIdx = -1;
+                DestroyAndIntantiate();
             }
             else
             {
@@ -59,36 +56,15 @@ public class UnitClass : MonoBehaviour
         
     }
 
-    //private void OnMouseDown()
-    //{
-    //    gameObject.transform.position = MouseControll.Instance.mousePos;
+    public void DestroyAndIntantiate()
+    {
+        MouseControll.Instance.MatchUnit.gameObject.SendMessage("DisConnectDelegate",SendMessageOptions.RequireReceiver) ;
+        Destroy(MouseControll.Instance.MatchUnit.gameObject);
+        MouseControll.Instance.ClickedUnitClass = null;
+        MouseControll.Instance.IsClassMatch = false;
+        Instantiate(GameManager.Instance.GetCharacterPrefab(MyIndex), MouseControll.Instance.GetUnitPos(), Quaternion.identity);
+        MouseControll.Instance.MatchUnit = null;
+        Destroy(gameObject);
+    }
 
-    //    isMatched = true;
-    //    MouseControll.Instance.IsClicked = false;
-    //    MouseControll.Instance.ClickedUnitClass = this;
-    //}
-
-    //public void MouseDragEvent()
-    //{
-    //    gameObject.transform.position = MouseControll.Instance.mousePos - new Vector3(0, 0, MouseControll.Instance.mousePos.z);
-    //}
-
-    //public void MouseUpEvent()
-    //{
-    //    gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(gameObject.transform.position));
-
-    //    if (gameObject.transform.position == MouseControll.Instance.GetUnitPos())
-    //    {
-    //        Destroy(gameObject);
-    //        Destroy(GameManager.Instance.GetIdxCharacter(MouseControll.Instance.UnitPosIdx).gameObject);
-    //        Instantiate(GameManager.Instance.GetCharacterPrefab(MyIndex), MouseControll.Instance.GetUnitPos(), Quaternion.identity);
-    //        MouseControll.Instance.UnitPosIdx = -1;
-    //    }
-    //    else
-    //    {
-    //        gameObject.transform.position = startPos;
-    //    }
-
-    //    isMatched = false;
-    //}
 }

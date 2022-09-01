@@ -14,13 +14,13 @@ public class UnitClassControll : MonoBehaviour
 
     private void Start()
     {
-        unitMaxIdx = 3;
+        unitMaxIdx = 5;
 
         for (int i = 0; i < unitMaxIdx; i++)
         {
             GameObject obj = Instantiate(GameManager.Instance.GetUnitPrefab(i));
 
-            obj.gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(new Vector3Int(4 + i + count, 1));
+            obj.gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(new Vector3Int(2 + i + count, 1));
             obj.gameObject.SetActive(true);
             UnitClass uc = obj.GetComponent<UnitClass>();
             uc.MyIndex = i;
