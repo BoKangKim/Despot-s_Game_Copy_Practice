@@ -19,10 +19,21 @@ public class MouseControll : Singleton<MouseControll>
     int clickCount = 0;
     public SetClicked setClicked = null;
     public Matched Match = null;
+    bool isStart = false;
+
+    void IsStart(bool isStart)
+    {
+        this.isStart = isStart;
+    }
 
     private void Awake()
     {
         Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
+    }
+
+    private void Start()
+    {
+        GameManager.Instance.IsStart += IsStart;
     }
 
     // X Max -5
@@ -34,13 +45,18 @@ public class MouseControll : Singleton<MouseControll>
 
     private void Update()
     {
+        if (isStart == true)
+            return;
+
         if (Input.GetMouseButtonDown(0))
         {
+            MatchUnit = null;
             if (IsClicked == false && clickCount == 0)
                 IsClicked = true;
 
             clickCount++;
             TransferMousePos();
+            
             if(setClicked != null)
                 setClicked(0);
         }
@@ -54,7 +70,7 @@ public class MouseControll : Singleton<MouseControll>
                     && mousePos.y >= -4.5f && mousePos.y <= 2.5f)
                 {
                     IsMove = true;
-                    StartCoroutine(MatchUnit.MoveToTarget());
+                    MatchUnit.StartCoroutine(MatchUnit.MoveToTarget());
                 }
             }
 
@@ -64,6 +80,9 @@ public class MouseControll : Singleton<MouseControll>
 
     private void OnMouseDrag()
     {
+        if (isStart == true)
+            return;
+
         if (IsClicked == true)
             return;
 
@@ -76,6 +95,9 @@ public class MouseControll : Singleton<MouseControll>
 
     private void OnMouseUp()
     {
+        if (isStart == true)
+            return;
+
         IsClicked = false;
         clickCount = 0;
         IsDrag = false;

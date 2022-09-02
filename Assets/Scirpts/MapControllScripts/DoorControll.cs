@@ -5,19 +5,36 @@ using UnityEngine;
 public class DoorControll : MonoBehaviour
 {
     Animator myAnimator;
+    bool isStart = false;
+
+    void IsStart(bool isStart)
+    {
+        this.isStart = isStart;
+    }
 
     private void Awake()
     {
         myAnimator = GetComponent<Animator>();
     }
 
+    private void Start()
+    {
+        GameManager.Instance.IsStart += IsStart;
+    }
+
     private void OnMouseEnter()
     {
+        if (isStart == true)
+            return;
+
         myAnimator.SetBool("isOpening",true);
     }
 
     private void OnMouseExit()
     {
+        if (isStart == true)
+            return;
+
         myAnimator.SetBool("isOnMouseDoor",false);
     }
 
