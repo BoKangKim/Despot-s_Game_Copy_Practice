@@ -7,14 +7,25 @@ public class UnitClass : MonoBehaviour
     Vector3 startPos;
     bool isMatched = false;
     public int MyIndex { get; set; } = -1;
+    bool isStart = false;
+
+    
+    void IsStart(bool isStart)
+    {
+        this.isStart = isStart;
+    }
 
     private void Start()
     {
+        GameManager.Instance.IsStart += IsStart;
         startPos = gameObject.transform.position;
     }
 
     void Update()
     {
+        if (isStart == true)
+            return;
+
         if(MouseControll.Instance.IsClicked == false
             && MouseControll.Instance.IsDrag == false
             && isMatched == false)
@@ -43,7 +54,14 @@ public class UnitClass : MonoBehaviour
             gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(gameObject.transform.position));
             if(gameObject.transform.position == MouseControll.Instance.GetUnitPos())
             {
-                DestroyAndIntantiate();
+                if(MouseControll.Instance.MatchUnit.IsNewBie == true)
+                {
+                    DestroyAndIntantiate();
+                }
+                else
+                {
+                    gameObject.transform.position = startPos;
+                }
             }
             else
             {
@@ -66,5 +84,6 @@ public class UnitClass : MonoBehaviour
         MouseControll.Instance.MatchUnit = null;
         Destroy(gameObject);
     }
+
 
 }

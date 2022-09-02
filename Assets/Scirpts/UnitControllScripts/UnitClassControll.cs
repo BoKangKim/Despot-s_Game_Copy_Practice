@@ -29,4 +29,17 @@ public class UnitClassControll : MonoBehaviour
         }
 
     }
+
+    private void DestroyList()
+    {
+        for(int i = 0; i < units.Count; i++)
+        {
+            if (units[i] != null)
+            {
+                Destroy(units[i].gameObject);
+            }
+        }
+
+        units.Clear();
+    }
 }

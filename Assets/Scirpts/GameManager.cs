@@ -3,14 +3,27 @@ using System.Collections.Generic;
 using UnityEngine.Tilemaps;
 using UnityEngine;
 
+public delegate void SetIsStart(bool isStart);
 public class GameManager : Singleton<GameManager>
 {
     [Header("À¯´Ö Á¤º¸")]
     [SerializeField] GameObject[] unitPrefab;
-    [SerializeField] GameObject[] characterPrefab;
+    [SerializeField] Unit[] characterPrefab;
     [SerializeField] Tilemap floorTileMap;
     DoorControll dc;
-    
+    bool isStart = false;
+    public SetIsStart IsStart = null;
+
+    List<Monster> monsters = null;
+    List<Unit> units = null;
+
+    void RequestIsStart(bool isStart)
+    {
+        this.isStart = isStart;
+        if (IsStart != null)
+            IsStart(isStart);
+    }
+
     public Tilemap GetTileMap()
     {
         return floorTileMap;
@@ -19,11 +32,13 @@ public class GameManager : Singleton<GameManager>
     #region MonoBeHavior
     private void Awake()
     {
+        units = new List<Unit>();
+        monsters = new List<Monster>();
         dc = FindObjectOfType<DoorControll>();
+        DontDestroyOnLoad(this);
     }
 
     #endregion
-
 
     #region Units Info
     public GameObject GetUnitPrefab(int idx)
@@ -31,9 +46,86 @@ public class GameManager : Singleton<GameManager>
         return unitPrefab[idx];
     }
 
-    public GameObject GetCharacterPrefab(int idx)
+    public Unit GetCharacterPrefab(int idx)
     {
         return characterPrefab[idx];
+    }
+
+    #endregion
+
+    #region List Controll
+    public void AddUnit(Unit unit)
+    {
+        units.Add(unit);
+    }
+
+    public int GetMyIdx()
+    {
+        return units.Count - 1;
+    }
+
+    public void RemoveUnit(int idx)
+    {
+        units.RemoveAt(idx);
+    }
+
+    public void AddMonster(Monster monster)
+    {
+        monsters.Add(monster);
+    }
+
+    public int GetMonsterIdx()
+    {
+        return monsters.Count - 1;
+    }
+
+    public void RemoveMonster(int idx)
+    {
+        units.RemoveAt(idx);
+    }
+
+    #endregion
+
+    #region Battle Move Position
+
+    public Monster FindTargetMonster(Unit unit)
+    {
+        int resultIdx = 0;
+
+        float distance = Vector3.Distance(unit.transform.position,monsters[0].gameObject.transform.position);
+        
+        for (int i = 1; i < monsters.Count; i++)
+        {
+            float temp = Vector3.Distance(unit.transform.position, monsters[i].gameObject.transform.position);
+
+            if (distance > temp)
+            {
+                distance = temp;
+                resultIdx = i;
+            }
+        }
+
+        return monsters[resultIdx];
+    }
+
+    public Unit FindTargetUnit(Monster monster)
+    {
+        int resultIdx = 0;
+
+        float distance = Vector3.Distance(monster.transform.position, units[0].gameObject.transform.position);
+
+        for (int i = 1; i < monsters.Count; i++)
+        {
+            float temp = Vector3.Distance(monster.transform.position, units[i].gameObject.transform.position);
+
+            if (distance > temp)
+            {
+                distance = temp;
+                resultIdx = i;
+            }
+        }
+
+        return units[resultIdx];
     }
 
     #endregion
