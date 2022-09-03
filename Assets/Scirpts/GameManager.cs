@@ -66,7 +66,15 @@ public class GameManager : Singleton<GameManager>
 
     public void RemoveUnit(int idx)
     {
+        if (units.Count == 0)
+            return;
+
         units.RemoveAt(idx);
+
+        for (int i = 0; i < units.Count; i++)
+        {
+            units[i].myIdx = i;
+        }
     }
 
     public void AddMonster(Monster monster)
@@ -81,7 +89,15 @@ public class GameManager : Singleton<GameManager>
 
     public void RemoveMonster(int idx)
     {
-        units.RemoveAt(idx);
+        if (monsters.Count == 0)
+            return;
+        Debug.Log(idx);
+        monsters.RemoveAt(idx);
+
+        for(int i = 0; i < monsters.Count; i++)
+        {
+            monsters[i].myIdx = i;
+        }
     }
 
     #endregion
@@ -90,18 +106,25 @@ public class GameManager : Singleton<GameManager>
 
     public Monster FindTargetMonster(Unit unit)
     {
+        if (monsters.Count == 0)
+            return null;
+
         int resultIdx = 0;
+        float distance = 0;
 
-        float distance = Vector3.Distance(unit.transform.position,monsters[0].gameObject.transform.position);
+        distance = Vector3.Distance(unit.transform.position,monsters[0].gameObject.transform.position);
         
-        for (int i = 1; i < monsters.Count; i++)
+        if(monsters.Count > 1)
         {
-            float temp = Vector3.Distance(unit.transform.position, monsters[i].gameObject.transform.position);
-
-            if (distance > temp)
+            for (int i = 0; i < monsters.Count; i++)
             {
-                distance = temp;
-                resultIdx = i;
+                float temp = Vector3.Distance(unit.transform.position, monsters[i].gameObject.transform.position);
+
+                if (distance > temp)
+                {
+                    distance = temp;
+                    resultIdx = i;
+                }
             }
         }
 
@@ -110,6 +133,9 @@ public class GameManager : Singleton<GameManager>
 
     public Unit FindTargetUnit(Monster monster)
     {
+        if (units.Count == 0)
+            return null;
+
         int resultIdx = 0;
 
         float distance = Vector3.Distance(monster.transform.position, units[0].gameObject.transform.position);

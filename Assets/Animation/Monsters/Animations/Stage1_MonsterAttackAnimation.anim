@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: NovisAttackAnimation
+  m_Name: Stage1_MonsterAttackAnimation
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -20,18 +20,18 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: -1630753102, guid: d3e5baee84e3b094a84126810c03dc48, type: 3}
-    - time: 0.125
-      value: {fileID: -1123980164, guid: d3e5baee84e3b094a84126810c03dc48, type: 3}
-    - time: 0.25
-      value: {fileID: -917259715, guid: d3e5baee84e3b094a84126810c03dc48, type: 3}
-    - time: 0.375
-      value: {fileID: 1364649487, guid: d3e5baee84e3b094a84126810c03dc48, type: 3}
+      value: {fileID: -1640242607, guid: 78b75a9dfd4f28a45b1a293237530f3f, type: 3}
+    - time: 0.11111111
+      value: {fileID: 749995187, guid: 78b75a9dfd4f28a45b1a293237530f3f, type: 3}
+    - time: 0.22222222
+      value: {fileID: -1098954968, guid: 78b75a9dfd4f28a45b1a293237530f3f, type: 3}
+    - time: 0.33333334
+      value: {fileID: 1371863812, guid: 78b75a9dfd4f28a45b1a293237530f3f, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
-  m_SampleRate: 8
+  m_SampleRate: 9
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -46,16 +46,16 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: -1630753102, guid: d3e5baee84e3b094a84126810c03dc48, type: 3}
-    - {fileID: -1123980164, guid: d3e5baee84e3b094a84126810c03dc48, type: 3}
-    - {fileID: -917259715, guid: d3e5baee84e3b094a84126810c03dc48, type: 3}
-    - {fileID: 1364649487, guid: d3e5baee84e3b094a84126810c03dc48, type: 3}
+    - {fileID: -1640242607, guid: 78b75a9dfd4f28a45b1a293237530f3f, type: 3}
+    - {fileID: 749995187, guid: 78b75a9dfd4f28a45b1a293237530f3f, type: 3}
+    - {fileID: -1098954968, guid: 78b75a9dfd4f28a45b1a293237530f3f, type: 3}
+    - {fileID: 1371863812, guid: 78b75a9dfd4f28a45b1a293237530f3f, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.5
+    m_StopTime: 0.44444445
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -75,8 +75,8 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.25
-    functionName: AttackMonster
+  - time: 0.33333334
+    functionName: AttackUnit
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

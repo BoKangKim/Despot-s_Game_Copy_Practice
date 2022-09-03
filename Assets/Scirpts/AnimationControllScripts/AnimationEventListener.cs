@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AnimationEventListener : MonoBehaviour
 {
+
     public void SendOpeningExit()
     {
         GameManager.Instance.SendOpeningExit();
@@ -13,4 +14,5 @@ public class AnimationEventListener : MonoBehaviour
     {
         GameManager.Instance.SendClosingExit();
     }
+    
 }

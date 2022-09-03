@@ -4,41 +4,72 @@ using UnityEngine;
 
 public class Monster : MonoBehaviour
 {
-    int myIdx = -1;
+    public int myIdx { get; set; } = -1;
     Unit targetUnit = null;
+    Animator ani;
+    STATE state;
+
+    [Header("몬스터 정보")]
+    [SerializeField] ScriptableMonster MyData;
+    public bool Death { get { return curHP <= 0; } }
+    float curHP;
+
     private void Awake()
     {
+        ani = GetComponent<Animator>();
+        curHP = MyData.MaxHp;
         GameManager.Instance.AddMonster(this);
         myIdx = GameManager.Instance.GetMonsterIdx();
     }
 
     private void OnEnable()
     {
-        StartCoroutine(State_MOVE());
+        state = STATE.IDLE;
+        StartCoroutine("State_" + state);
     }
 
+    #region Battle State
     enum STATE
     {
+        IDLE,
         MOVE,
         ATTACK,
         DEATH,
         MAX
     }
+    void TransferState(STATE Nextstate)
+    {
+        StopCoroutine("State_" + state);
+        state = Nextstate;
+        StartCoroutine("State_" + state);
+    }
+
+    IEnumerator State_IDLE()
+    {
+        if (targetUnit == null)
+            targetUnit = GameManager.Instance.FindTargetUnit(this);
+
+        if (targetUnit == null)
+        {
+            StopAllCoroutines();
+        }
+        else
+            TransferState(STATE.MOVE);
+
+        yield return null;
+    }
 
     IEnumerator State_MOVE()
     {
-        while (true)
+        while (state == STATE.MOVE)
         {
-            if (targetUnit == null)
-                targetUnit = GameManager.Instance.FindTargetUnit(this);
-
             Vector3 dirVector = (targetUnit.transform.position - gameObject.transform.position).normalized;
+            gameObject.transform.Translate(dirVector * MyData.MoveSpeed * Time.deltaTime);
 
-            gameObject.transform.Translate(dirVector * 3f * Time.deltaTime);
 
-
-            if (Vector3.Distance(gameObject.transform.position, targetUnit.transform.position) < 1f)
+            if (Vector3.Distance(gameObject.transform.position, targetUnit.transform.position) < MyData.AttackRange)
             {
+                TransferState(STATE.ATTACK);
                 yield break;
             }
 
@@ -46,10 +77,53 @@ public class Monster : MonoBehaviour
 
         }
     }
+    IEnumerator State_ATTACK()
+    {
 
-    //private void OnEnable()
-    //{
-    //    GameManager.Instance.AddMonster(this);
-    //    myIdx = GameManager.Instance.GetMonsterIdx();
-    //}
+        while (state == STATE.ATTACK)
+        {
+            ani.SetTrigger("IsAttack");
+
+            if (targetUnit.Death == true)
+            {
+                ani.SetBool("IsAttack", false);
+                targetUnit = null;
+                TransferState(STATE.IDLE);
+                yield break;
+            }
+            yield return new WaitForSeconds(MyData.AttackSpeed);
+        }
+    }
+
+    IEnumerator State_DEATH()
+    {
+        GameManager.Instance.RemoveMonster(myIdx);
+        ani.SetTrigger("IsDeath");
+        yield return null;
+    }
+    public void AttackUnit()
+    {
+        if (targetUnit != null)
+            targetUnit.SendMessage("TransferHP", MyData.AttackDamage, SendMessageOptions.DontRequireReceiver);
+    }
+
+    void TransferHP(float damage)
+    {
+        if (state == STATE.DEATH)
+            return;
+
+        curHP -= damage;
+
+        if(Death == true)
+        {
+            TransferState(STATE.DEATH);
+        }
+    }
+    
+    void MonsterDeath()
+    {
+        Destroy(this.gameObject);
+    }
+
+    #endregion
 }

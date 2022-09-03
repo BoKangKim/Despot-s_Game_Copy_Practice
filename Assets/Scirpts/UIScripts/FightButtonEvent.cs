@@ -9,13 +9,26 @@ public class FightButtonEvent : MonoBehaviour
     [SerializeField] Sprite buttonImg;
     [SerializeField] GameObject Floor;
     [SerializeField] MonsterSpawn spawn;
+    Sprite startImg = null;
 
     bool isStart = false;
 
+    void IsStart(bool isStart)
+    {
+        if (isStart == true)
+            return;
+
+        this.isStart = isStart;
+        Floor.SetActive(true);
+        sprite.sprite = startImg;
+    }
+
     private void Awake()
     {
+        GameManager.Instance.IsStart += IsStart;
         unitClassControll = FindObjectOfType<UnitClassControll>();
         sprite = GetComponent<SpriteRenderer>();
+        startImg = sprite.sprite;
     }
 
     private void OnMouseDown()
