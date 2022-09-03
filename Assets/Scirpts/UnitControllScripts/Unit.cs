@@ -130,7 +130,7 @@ public class Unit : MonoBehaviour
 
     #endregion
 
-    #region
+    #region Battle State
     enum STATE 
     {
         MOVE,
@@ -155,11 +155,22 @@ public class Unit : MonoBehaviour
             if(Vector3.Distance(gameObject.transform.position, targetMonster.transform.position) < attackRange)
             {
                 ani.SetBool("IsRun", false);
+                StartCoroutine(State_ATTACK());
                 yield break;
             }
 
             yield return null;
 
+        }
+    }
+
+    IEnumerator State_ATTACK()
+    {
+        ani.SetBool("IsAttack",true);
+
+        while (true)
+        {
+            yield return null;
         }
     }
 
