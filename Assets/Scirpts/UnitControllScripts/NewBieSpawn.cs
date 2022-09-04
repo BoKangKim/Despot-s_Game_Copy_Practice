@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class NewBieSpawn : MonoBehaviour
 {
-    Unit newBiePrefab = null;
-    Unit BroadSwordPrefab = null;
     GameObject NewbieBox = null;
     int startNew = 3;
 
     private void Awake()
     {
-        newBiePrefab = GameManager.Instance.GetCharacterPrefab(1);
-        BroadSwordPrefab = GameManager.Instance.GetCharacterPrefab(0);
         NewbieBox = new GameObject("NewbieBox");
         NewbieBox.transform.position = new Vector3(0f, 0f, 0f);
     }

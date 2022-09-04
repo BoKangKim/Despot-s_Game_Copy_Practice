@@ -28,13 +28,13 @@ public class MonsterSpawn : MonoBehaviour
     {
         for(int i = 0; i < countMonster; i++)
         {
-            GameObject spawn = Instantiate(SpawnArea,new Vector3(5.5f,(float)(i + count - 3.5f),0),Quaternion.identity);
+            GameObject spawn = Instantiate(SpawnArea,new Vector3(5.5f,(float)(i + count - 6.5f),0),Quaternion.identity);
             spawn.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(spawn.transform.position));
             spawn.transform.SetParent(MonsterSpanwBox.transform,true);
             SpawnAreaPos[i] = spawn.transform.position;
 
             spawnList.Add(spawn);
-            count += 2f;
+            count += 9f;
         }
     }
 

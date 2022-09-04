@@ -82,15 +82,24 @@ public class Monster : MonoBehaviour
 
         while (state == STATE.ATTACK)
         {
-            ani.SetTrigger("IsAttack");
-
-            if (targetUnit.Death == true)
+            if(targetUnit.Death == true)
             {
-                ani.SetBool("IsAttack", false);
-                targetUnit = null;
+                if (targetUnit == null)
+                {
+                    TransferState(STATE.IDLE);
+                    yield break;
+                }
+            }
+            else if (Vector3.Distance(gameObject.transform.position, targetUnit.transform.position) > MyData.AttackRange)
+            {
                 TransferState(STATE.IDLE);
                 yield break;
             }
+            else
+            {
+                ani.SetTrigger("IsAttack");
+            }
+
             yield return new WaitForSeconds(MyData.AttackSpeed);
         }
     }

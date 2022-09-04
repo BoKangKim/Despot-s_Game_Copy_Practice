@@ -138,13 +138,14 @@ public class GameManager : Singleton<GameManager>
             return null;
 
         int resultIdx = 0;
+        float distance = 0f;
 
-        float distance = Vector3.Distance(monster.transform.position, units[0].gameObject.transform.position);
+        distance = Vector3.Distance(monster.transform.position, units[0].gameObject.transform.position);
 
-        for (int i = 1; i < monsters.Count; i++)
+        for (int i = 0; i < units.Count; i++)
         {
             float temp = Vector3.Distance(monster.transform.position, units[i].gameObject.transform.position);
-
+            
             if (distance > temp)
             {
                 distance = temp;

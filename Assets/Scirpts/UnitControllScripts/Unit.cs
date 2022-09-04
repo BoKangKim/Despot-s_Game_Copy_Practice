@@ -46,6 +46,7 @@ public class Unit : MonoBehaviour
 
     private void Awake()
     {
+        GameManager.Instance.AddUnit(this);
         curHP = MyData.MaxHp;
         sceneState = SCENE_STATE.ASSIGN;
         ani = GetComponent<Animator>();
@@ -66,7 +67,6 @@ public class Unit : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.Instance.AddUnit(this);
         myIdx = GameManager.Instance.GetMyIdx();
     }
 
@@ -212,6 +212,14 @@ public class Unit : MonoBehaviour
         while (state == STATE.MOVE)
         {
             Vector3 dirVector = (targetMonster.transform.position - gameObject.transform.position).normalized;
+            if (targetMonster.transform.position.x < gameObject.transform.position.x)
+            {
+                RenColor.flipX = true;
+            }
+            else
+            {
+                RenColor.flipX = false;
+            }
             gameObject.transform.Translate(dirVector * MyData.MoveSpeed * Time.deltaTime);
 
             if(Vector3.Distance(gameObject.transform.position, targetMonster.transform.position) < MyData.AttackRange)
@@ -231,14 +239,24 @@ public class Unit : MonoBehaviour
 
         while (state == STATE.ATTACK)
         {
-            ani.SetTrigger("IsAttack");
-            if (targetMonster.Death == true)
+            if(targetMonster.Death == true)
             {
-                ani.SetBool("IsAttack", false);
-                targetMonster = null;
+                if (targetMonster == null)
+                {
+                    TransferState(STATE.IDLE);
+                    yield break;
+                }
+            }
+            else if (Vector3.Distance(gameObject.transform.position, targetMonster.transform.position) > MyData.AttackRange)
+            {
                 TransferState(STATE.IDLE);
                 yield break;
             }
+            else
+            {
+                ani.SetTrigger("IsAttack");
+            }
+
 
             yield return new WaitForSeconds(MyData.AttackSpeed);
         }
