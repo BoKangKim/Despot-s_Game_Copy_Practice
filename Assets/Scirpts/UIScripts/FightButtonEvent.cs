@@ -9,6 +9,7 @@ public class FightButtonEvent : MonoBehaviour
     [SerializeField] Sprite buttonImg;
     [SerializeField] GameObject Floor;
     [SerializeField] MonsterSpawn spawn;
+    [SerializeField] GameObject unitClass;
     Sprite startImg = null;
 
     bool isStart = false;
@@ -21,6 +22,7 @@ public class FightButtonEvent : MonoBehaviour
         this.isStart = isStart;
         Floor.SetActive(true);
         sprite.sprite = startImg;
+        unitClass.SetActive(true);
     }
 
     private void Awake()

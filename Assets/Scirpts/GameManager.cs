@@ -4,11 +4,12 @@ using UnityEngine.Tilemaps;
 using UnityEngine;
 
 public delegate void SetIsStart(bool isStart);
+
 public class GameManager : Singleton<GameManager>
 {
     [Header("À¯´Ö Á¤º¸")]
     [SerializeField] GameObject[] unitPrefab;
-    [SerializeField] Unit[] characterPrefab;
+    public Unit[] characterPrefab;
     [SerializeField] Tilemap floorTileMap;
     DoorControll dc;
     bool isStart = false;
@@ -91,7 +92,7 @@ public class GameManager : Singleton<GameManager>
     {
         if (monsters.Count == 0)
             return;
-        Debug.Log(idx);
+
         monsters.RemoveAt(idx);
 
         for(int i = 0; i < monsters.Count; i++)

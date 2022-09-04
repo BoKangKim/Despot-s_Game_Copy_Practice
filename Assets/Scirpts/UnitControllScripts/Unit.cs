@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void Fire(Monster target,Transform unitTrans);
 public class Unit : MonoBehaviour
 {
     enum SCENE_STATE
@@ -24,6 +25,8 @@ public class Unit : MonoBehaviour
     Animator ani;
     public int myIdx { get; set; } = -1;
     public bool Death { get { return curHP <= 0; } }
+
+    public Fire fire = null;
 
     [Header("À¯´Ö ½ºÅÈ")]
     [SerializeField] ScriptableUnit MyData;
@@ -250,8 +253,13 @@ public class Unit : MonoBehaviour
 
     public void AttackMonster()
     {
-        if(targetMonster != null)
-            targetMonster.SendMessage("TransferHP", MyData.AttackDamage, SendMessageOptions.DontRequireReceiver);
+        if (fire != null)
+            fire(targetMonster,gameObject.transform);
+        else
+        {
+            if (targetMonster != null)
+                targetMonster.SendMessage("TransferHP", MyData.AttackDamage, SendMessageOptions.DontRequireReceiver);
+        }
     }
 
     void TransferHP(float damage)
@@ -270,6 +278,11 @@ public class Unit : MonoBehaviour
     void UnitDeath()
     {
         Destroy(this.gameObject);
+    }
+
+    public Monster GetTargetMonster()
+    {
+        return targetMonster;
     }
 
 
