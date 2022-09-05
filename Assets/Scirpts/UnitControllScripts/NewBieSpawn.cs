@@ -6,6 +6,7 @@ public class NewBieSpawn : MonoBehaviour
 {
     GameObject NewbieBox = null;
     int startNew = 3;
+    int cost = 1;
 
     private void Awake()
     {
@@ -28,6 +29,17 @@ public class NewBieSpawn : MonoBehaviour
             }
         }
         
+    }
+
+    private void CreateNewBie(Vector3 pos)
+    {
+        if (GameManager.Instance.coinCount < cost)
+            return;
+
+        Unit unit = Instantiate(GameManager.Instance.characterPrefab[GameManager.Instance.characterPrefab.Length - 1]);
+        unit.gameObject.transform.position = pos;
+        unit.transform.SetParent(NewbieBox.transform, false);
+        GameManager.Instance.ChangeCoinText(-cost);
     }
 
 }

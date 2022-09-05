@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public delegate void SetClicked(int mouse);
-public delegate void Matched();
+public delegate void Matched(string name);
 public class MouseControll : Singleton<MouseControll>
 {
     [Header("마우스 정보")]
@@ -19,7 +19,10 @@ public class MouseControll : Singleton<MouseControll>
     int clickCount = 0;
     public SetClicked setClicked = null;
     public Matched Match = null;
+    public Unit NextUnit = null;
+    public Unit PreUnit = null;
     bool isStart = false;
+    NewBieSpawn newbieSpwan = null;
 
     void IsStart(bool isStart)
     {
@@ -28,6 +31,7 @@ public class MouseControll : Singleton<MouseControll>
 
     private void Awake()
     {
+        newbieSpwan = FindObjectOfType<NewBieSpawn>();
         Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
     }
 
@@ -50,7 +54,8 @@ public class MouseControll : Singleton<MouseControll>
 
         if (Input.GetMouseButtonDown(0))
         {
-            MatchUnit = null;
+            PreUnit = null;
+            ClickedUnitClass = null;
             if (IsClicked == false && clickCount == 0)
                 IsClicked = true;
 
@@ -62,15 +67,18 @@ public class MouseControll : Singleton<MouseControll>
         }
         else if (Input.GetMouseButtonDown(1))
         {
-            if (MatchUnit != null && IsMove == false)
+            NextUnit = null;
+            if (PreUnit != null && IsMove == false)
             {
                 TransferMousePos();
-                
+                Match("NextUnit");
                 if (mousePos.x <= -5.5f && mousePos.x >= -11.5f
                     && mousePos.y >= -4.5f && mousePos.y <= 2.5f)
                 {
                     IsMove = true;
-                    MatchUnit.StartCoroutine(MatchUnit.MoveToTarget());
+                    PreUnit.StartCoroutine(PreUnit.MoveToTarget(NextUnit));
+                    if (NextUnit != null)
+                        NextUnit.StartCoroutine(NextUnit.MoveToTarget(PreUnit));
                 }
             }
 
@@ -97,16 +105,27 @@ public class MouseControll : Singleton<MouseControll>
     {
         if (isStart == true)
             return;
+        if (ClickedUnitClass == null)
+            return;
 
+        MatchUnit = null;
         IsClicked = false;
         clickCount = 0;
         IsDrag = false;
+        mousePos = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(mousePos));
+        if (Match != null)
+            Match("MatchUnit");
+
         
-        if(IsClassMatch == true)
+        
+        if (ClickedUnitClass.IsNovice == true)
         {
-            mousePos = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(mousePos));
-            if(Match != null)
-                Match();
+            if (mousePos.x <= -5.5f && mousePos.x >= -11.5f
+                    && mousePos.y >= -4.5f && mousePos.y <= 2.5f)
+            {
+                if (MatchUnit == null)
+                    newbieSpwan.SendMessage("CreateNewBie",mousePos,SendMessageOptions.RequireReceiver);
+            }
         }
 
     }

@@ -8,7 +8,8 @@ public class UnitClass : MonoBehaviour
     bool isMatched = false;
     public int MyIndex { get; set; } = -1;
     bool isStart = false;
-
+    public bool IsNovice { get; set; } = false;
+    int myCost;
     
     void IsStart(bool isStart)
     {
@@ -17,6 +18,8 @@ public class UnitClass : MonoBehaviour
 
     private void Start()
     {
+        TextMesh cost = GetComponentInChildren<TextMesh>();
+        myCost = int.Parse(cost.text);
         GameManager.Instance.IsStart += IsStart;
         startPos = gameObject.transform.position;
     }
@@ -41,6 +44,7 @@ public class UnitClass : MonoBehaviour
             isMatched = true;
             MouseControll.Instance.IsClassMatch = true;
             MouseControll.Instance.IsClicked = false;
+            MouseControll.Instance.ClickedUnitClass = this;
         }
         else if (isMatched == true 
             && MouseControll.Instance.IsDrag == true 
@@ -54,7 +58,9 @@ public class UnitClass : MonoBehaviour
             gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(gameObject.transform.position));
             if(gameObject.transform.position == MouseControll.Instance.GetUnitPos())
             {
-                if(MouseControll.Instance.MatchUnit.IsNewBie == true)
+                if(MouseControll.Instance.MatchUnit.IsNewBie == true &&
+                    GameManager.Instance.coinCount >= myCost
+                    && IsNovice == false)
                 {
                     DestroyAndIntantiate();
                 }
@@ -76,7 +82,9 @@ public class UnitClass : MonoBehaviour
 
     public void DestroyAndIntantiate()
     {
+        GameManager.Instance.ChangeCoinText(-myCost);
         MouseControll.Instance.MatchUnit.gameObject.SendMessage("DisConnectDelegate",SendMessageOptions.RequireReceiver) ;
+        MouseControll.Instance.MatchUnit.curHP = -1;
         Destroy(MouseControll.Instance.MatchUnit.gameObject);
         MouseControll.Instance.ClickedUnitClass = null;
         MouseControll.Instance.IsClassMatch = false;

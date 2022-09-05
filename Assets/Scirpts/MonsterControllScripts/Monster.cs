@@ -28,6 +28,12 @@ public class Monster : MonoBehaviour
         StartCoroutine("State_" + state);
     }
 
+    private void OnDestroy()
+    {
+        if(Death == true)
+            GameManager.Instance.RemoveMonster(myIdx);
+    }
+
     #region Battle State
     enum STATE
     {
@@ -106,7 +112,7 @@ public class Monster : MonoBehaviour
 
     IEnumerator State_DEATH()
     {
-        GameManager.Instance.RemoveMonster(myIdx);
+        GameManager.Instance.ChangeCoinText(MyData.Cost);
         ani.SetTrigger("IsDeath");
         yield return null;
     }

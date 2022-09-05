@@ -17,3 +17,4 @@ MonoBehaviour:
   AttackRange: 1
   AttackSpeed: 1
   MaxHp: 20
+  Cost: 1

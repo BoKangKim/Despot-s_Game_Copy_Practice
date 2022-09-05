@@ -12,4 +12,5 @@ public class ScriptableMonster : ScriptableObject
     public float AttackRange;
     public float AttackSpeed;
     public float MaxHp;
+    public int Cost;
 }

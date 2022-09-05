@@ -10,24 +10,29 @@ public class UnitClassControll : MonoBehaviour
 
     int unitMaxIdx = 0;
     int count = 0;
-    List<GameObject> units = new List<GameObject>();
+    List<UnitClass> units = new List<UnitClass>();
 
     private void Start()
     {
         unitMaxIdx = 5;
-
+        UnitClass obj = null;
         for (int i = 0; i < unitMaxIdx; i++)
         {
-            GameObject obj = Instantiate(GameManager.Instance.GetUnitPrefab(i));
-
-            obj.gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(new Vector3Int(2 + i + count, 1));
+            obj = Instantiate(GameManager.Instance.GetUnitPrefab(i));
             obj.gameObject.SetActive(true);
-            UnitClass uc = obj.GetComponent<UnitClass>();
-            uc.MyIndex = i;
+            obj.gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(new Vector3Int(2 + i + count, 1));
+            obj.MyIndex = i;
             units.Add(obj);
             count++;
         }
 
+        obj = Instantiate(GameManager.Instance.GetUnitPrefab(GameManager.Instance.UnitClassCount() - 1));
+        obj.MyIndex = unitMaxIdx;
+        obj.gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(new Vector3Int(2 , -1));
+        obj.IsNovice = true;
+        obj.gameObject.SetActive(true);
+        units.Add(obj);
+        count++;
     }
 
     private void DestroyList()

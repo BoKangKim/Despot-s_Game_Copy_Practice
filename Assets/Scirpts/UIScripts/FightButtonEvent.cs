@@ -21,7 +21,7 @@ public class FightButtonEvent : MonoBehaviour
 
         this.isStart = isStart;
         Floor.SetActive(true);
-        sprite.sprite = startImg;
+        //sprite.sprite = startImg;
         unitClass.SetActive(true);
     }
 

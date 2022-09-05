@@ -24,13 +24,13 @@ public class Unit : MonoBehaviour
     Monster targetMonster = null;
     Animator ani;
     public int myIdx { get; set; } = -1;
-    public bool Death { get { return curHP <= 0; } }
+    public bool Death { get { return curHP <= 0; }}
 
     public Fire fire = null;
 
     [Header("À¯´Ö ½ºÅÈ")]
     [SerializeField] ScriptableUnit MyData;
-    float curHP;
+    public float curHP { get; set; }
     STATE state;
 
     void IsStart(bool isStart)
@@ -70,6 +70,12 @@ public class Unit : MonoBehaviour
         myIdx = GameManager.Instance.GetMyIdx();
     }
 
+    private void OnDestroy()
+    {
+        if(Death == true)
+            GameManager.Instance.RemoveUnit(myIdx);
+    }
+
     #region À¯´Ö ¹èÄ¡ »óÅÂ
     public void SetClicked(int mouse)
     {
@@ -81,7 +87,7 @@ public class Unit : MonoBehaviour
             if(MouseControll.Instance.mousePos == GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(gameObject.transform.position)))
             {
                 isSelected = true;
-                MouseControll.Instance.MatchUnit = this;
+                MouseControll.Instance.PreUnit = this;
                 RenColor.color = Color.green;
             }
             else
@@ -94,22 +100,33 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public void Matched()
+    public void Matched(string name)
     {
         if (sceneState != SCENE_STATE.ASSIGN)
             return;
 
-        if (MouseControll.Instance.mousePos == GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(gameObject.transform.position))
-            && IsNewBie == true)
+        if (MouseControll.Instance.mousePos == GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(gameObject.transform.position)))
         {
-            MouseControll.Instance.MatchUnit = this;
+            if(name == "NextUnit")
+            {
+                MouseControll.Instance.NextUnit = this;
+            }
+            else if(name == "MatchUnit")
+            {
+                MouseControll.Instance.MatchUnit = this;
+            }
         }
-        
+       
+
     }
     
-    public IEnumerator MoveToTarget()
+    public IEnumerator MoveToTarget(Unit unit)
     {
-        target = MouseControll.Instance.mousePos;
+        if (unit == null)
+            target = MouseControll.Instance.mousePos;
+        else
+            target = unit.transform.position;
+
         Vector3 dirVector = (target - gameObject.transform.position).normalized;
         if(target.x < gameObject.transform.position.x)
         {
@@ -264,7 +281,6 @@ public class Unit : MonoBehaviour
 
     IEnumerator State_DEATH()
     {
-        GameManager.Instance.RemoveUnit(myIdx);
         ani.SetTrigger("IsDeath");
         yield return null;
     }

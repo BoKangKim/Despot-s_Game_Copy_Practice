@@ -2,13 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Tilemaps;
 using UnityEngine;
+using UnityEngine.UI;
 
 public delegate void SetIsStart(bool isStart);
 
 public class GameManager : Singleton<GameManager>
 {
+    [Header("UI 정보")]
+    [SerializeField] Text CoinCount;
+    [SerializeField] Text UnitCount;
+    [SerializeField] Text FoodCount;
+    public int coinCount { get; set; }
+    public int unitCount { get; set; }
+    public int foodCount { get; set; }
+
     [Header("유닛 정보")]
-    [SerializeField] GameObject[] unitPrefab;
+    [SerializeField] UnitClass[] unitPrefab;
     public Unit[] characterPrefab;
     [SerializeField] Tilemap floorTileMap;
     DoorControll dc;
@@ -33,6 +42,12 @@ public class GameManager : Singleton<GameManager>
     #region MonoBeHavior
     private void Awake()
     {
+        coinCount = 20;
+        unitCount = 0;
+        foodCount = 40;
+        CoinCount.text = (coinCount).ToString();
+        UnitCount.text = (unitCount).ToString();
+        FoodCount.text = (foodCount).ToString();
         units = new List<Unit>();
         monsters = new List<Monster>();
         dc = FindObjectOfType<DoorControll>();
@@ -41,8 +56,27 @@ public class GameManager : Singleton<GameManager>
 
     #endregion
 
+    #region UI Info
+    public void ChangeCoinText(int count)
+    {
+        coinCount += count;
+        CoinCount.text = (coinCount).ToString();
+    }
+    public void ChangeUnitText(int count)
+    {
+        unitCount += count;
+        UnitCount.text = (unitCount).ToString();
+    }
+    public void ChangeFoodText(int count)
+    {
+        foodCount += count;
+        FoodCount.text = (foodCount).ToString();
+    }
+
+    #endregion
+
     #region Units Info
-    public GameObject GetUnitPrefab(int idx)
+    public UnitClass GetUnitPrefab(int idx)
     {
         return unitPrefab[idx];
     }
@@ -52,12 +86,18 @@ public class GameManager : Singleton<GameManager>
         return characterPrefab[idx];
     }
 
+    public int UnitClassCount()
+    {
+        return unitPrefab.Length;
+    }
+
     #endregion
 
     #region List Controll
     public void AddUnit(Unit unit)
     {
         units.Add(unit);
+        ChangeUnitText(1);
     }
 
     public int GetMyIdx()
@@ -72,6 +112,7 @@ public class GameManager : Singleton<GameManager>
 
         units.RemoveAt(idx);
 
+        ChangeUnitText(-1);
         for (int i = 0; i < units.Count; i++)
         {
             units[i].myIdx = i;
