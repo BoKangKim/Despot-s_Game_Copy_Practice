@@ -21,21 +21,23 @@ public class FightButtonEvent : MonoBehaviour
 
         this.isStart = isStart;
         Floor.SetActive(true);
-        //sprite.sprite = startImg;
         unitClass.SetActive(true);
     }
 
     private void Awake()
     {
         GameManager.Instance.IsStart += IsStart;
+        GameManager.Instance.sab = SetActiveButton;
         unitClassControll = FindObjectOfType<UnitClassControll>();
         sprite = GetComponent<SpriteRenderer>();
         startImg = sprite.sprite;
     }
-
+    
     private void OnMouseDown()
     {
         if (isStart == true)
+            return;
+        if (GameManager.Instance.sceneState != SCENE_STATE.ASSIGN)
             return;
 
         spawn.SendMessage("SpawnMonster", SendMessageOptions.RequireReceiver);
@@ -48,4 +50,10 @@ public class FightButtonEvent : MonoBehaviour
             unitClassControll.SendMessage("DestroyList",SendMessageOptions.RequireReceiver);
         }
     }
+
+    public void SetActiveButton()
+    {
+        sprite.sprite = startImg;
+    }
+
 }

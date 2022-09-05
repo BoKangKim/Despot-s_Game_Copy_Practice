@@ -8,17 +8,28 @@ public class UnitClassControll : MonoBehaviour
     // (12,4) -> Right Top
     // (12,-7) -> Left Bottom
 
-    int unitMaxIdx = 0;
+    int unitMaxIdx = 4;
     int count = 0;
     List<UnitClass> units = new List<UnitClass>();
-
-    private void Start()
+    
+    private void OnEnable()
     {
-        unitMaxIdx = 4;
+        CreateList();
+    }
+
+    private void OnDisable()
+    {
+        count = 0;
+        DestroyList();
+    }
+
+    private void CreateList()
+    {
         UnitClass obj = null;
+        Debug.Log(unitMaxIdx);
         for (int i = 0; i < unitMaxIdx; i++)
         {
-            int rndIdx = Random.Range(0,9);
+            int rndIdx = Random.Range(0, 9);
             obj = Instantiate(GameManager.Instance.GetUnitPrefab(rndIdx));
             obj.gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(new Vector3Int(2 + i + count, 1));
             obj.MyIndex = rndIdx;
@@ -30,8 +41,8 @@ public class UnitClassControll : MonoBehaviour
 
         obj = Instantiate(GameManager.Instance.GetUnitPrefab(GameManager.Instance.UnitClassCount() - 1));
         obj.MyIndex = unitMaxIdx;
-        obj.gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(new Vector3Int(2 , -1));
-        
+        obj.gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(new Vector3Int(2, -1));
+
         obj.gameObject.SetActive(true);
         units.Add(obj);
         count++;

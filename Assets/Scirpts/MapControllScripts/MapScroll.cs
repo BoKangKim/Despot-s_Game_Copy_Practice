@@ -29,6 +29,7 @@ public class MapScroll : MonoBehaviour
                 gameObject.transform.position = new Vector3(gameObject.transform.position.x , prePos.y - 20, 0);
                 prePos = gameObject.transform.position;
                 GameManager.Instance.sceneState = SCENE_STATE.ASSIGN;
+                GameManager.Instance.SetActiveTrueUnit();
                 yield break;
             }
 

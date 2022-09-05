@@ -15,6 +15,8 @@ public enum SCENE_STATE
 
 public delegate void SetIsStart(bool isStart);
 public delegate void StartScroll();
+public delegate void SetActiveButton();
+
 public class GameManager : Singleton<GameManager>
 {
     [Header("UI 정보")]
@@ -24,6 +26,8 @@ public class GameManager : Singleton<GameManager>
     public int coinCount { get; set; }
     public int unitCount { get; set; }
     public int foodCount { get; set; }
+    public SetActiveButton sab;
+
 
     [Header("유닛 정보")]
     [SerializeField] UnitClass[] unitPrefab;
@@ -32,6 +36,7 @@ public class GameManager : Singleton<GameManager>
     DoorControll dc;
     bool isStart = false;
     public SetIsStart IsStart = null;
+    [SerializeField] GameObject unitClassManger;
 
     List<Monster> monsters = null;
     List<Unit> units = null;
@@ -46,6 +51,7 @@ public class GameManager : Singleton<GameManager>
         if (sceneState != SCENE_STATE.SHOP)
             return;
 
+        unitClassManger.SetActive(false);
         sceneState = SCENE_STATE.SCROLL;
         ChangeFoodText(-units.Count);
         for(int i = 0; i < units.Count; i++)
@@ -54,6 +60,16 @@ public class GameManager : Singleton<GameManager>
         }
         if (scroll != null)
             scroll();
+            }
+
+    public void SetActiveTrueUnit()
+    {
+        for(int i = 0; i < units.Count; i++)
+        {
+            units[i].gameObject.SetActive(true);
+        }
+        if(sab != null)
+            sab();
     }
 
     void RequestIsStart(bool isStart)
