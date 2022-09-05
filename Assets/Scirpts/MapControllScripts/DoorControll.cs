@@ -24,6 +24,9 @@ public class DoorControll : MonoBehaviour
 
     private void OnMouseEnter()
     {
+        if (GameManager.Instance.sceneState != SCENE_STATE.SHOP)
+            return;
+
         if (isStart == true)
             return;
 
@@ -32,10 +35,21 @@ public class DoorControll : MonoBehaviour
 
     private void OnMouseExit()
     {
+        if (GameManager.Instance.sceneState != SCENE_STATE.SHOP)
+            return;
+
         if (isStart == true)
             return;
 
         myAnimator.SetBool("isOnMouseDoor",false);
+    }
+
+    private void OnMouseDown()
+    {
+        if (GameManager.Instance.sceneState != SCENE_STATE.SHOP)
+            return;
+
+        GameManager.Instance.StartScrollCoroutine();
     }
 
     private void SetAniOpening()
@@ -49,4 +63,6 @@ public class DoorControll : MonoBehaviour
     {
         myAnimator.SetBool("isClosing", false);
     }
+
+    
 }

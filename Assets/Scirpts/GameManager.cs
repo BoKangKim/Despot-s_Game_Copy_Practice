@@ -4,8 +4,17 @@ using UnityEngine.Tilemaps;
 using UnityEngine;
 using UnityEngine.UI;
 
-public delegate void SetIsStart(bool isStart);
+public enum SCENE_STATE
+{
+    ASSIGN,
+    BATTLE,
+    SHOP,
+    SCROLL,
+    MAX
+}
 
+public delegate void SetIsStart(bool isStart);
+public delegate void StartScroll();
 public class GameManager : Singleton<GameManager>
 {
     [Header("UI Á¤º¸")]
@@ -26,6 +35,26 @@ public class GameManager : Singleton<GameManager>
 
     List<Monster> monsters = null;
     List<Unit> units = null;
+
+    [Header("¸Ê Á¤º¸")]
+    public StartScroll scroll;
+    public SCENE_STATE sceneState { get; set; } = SCENE_STATE.ASSIGN;
+
+
+    public void StartScrollCoroutine()
+    {
+        if (sceneState != SCENE_STATE.SHOP)
+            return;
+
+        sceneState = SCENE_STATE.SCROLL;
+        ChangeFoodText(-units.Count);
+        for(int i = 0; i < units.Count; i++)
+        {
+            units[i].gameObject.SetActive(false);
+        }
+        if (scroll != null)
+            scroll();
+    }
 
     void RequestIsStart(bool isStart)
     {
@@ -48,6 +77,8 @@ public class GameManager : Singleton<GameManager>
         CoinCount.text = (coinCount).ToString();
         UnitCount.text = (unitCount).ToString();
         FoodCount.text = (foodCount).ToString();
+        sceneState = SCENE_STATE.ASSIGN;
+        
         units = new List<Unit>();
         monsters = new List<Monster>();
         dc = FindObjectOfType<DoorControll>();

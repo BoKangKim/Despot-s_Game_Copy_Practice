@@ -105,8 +105,7 @@ public class MouseControll : Singleton<MouseControll>
     {
         if (isStart == true)
             return;
-        if (ClickedUnitClass == null)
-            return;
+        
 
         MatchUnit = null;
         IsClicked = false;
@@ -116,8 +115,8 @@ public class MouseControll : Singleton<MouseControll>
         if (Match != null)
             Match("MatchUnit");
 
-        
-        
+        if (ClickedUnitClass == null)
+            return;
         if (ClickedUnitClass.IsNovice == true)
         {
             if (mousePos.x <= -5.5f && mousePos.x >= -11.5f

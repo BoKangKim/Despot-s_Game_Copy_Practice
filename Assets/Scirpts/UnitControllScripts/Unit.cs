@@ -5,14 +5,6 @@ using UnityEngine;
 public delegate void Fire(Monster target);
 public class Unit : MonoBehaviour
 {
-    enum SCENE_STATE
-    {
-        ASSIGN,
-        BATTLE,
-        MAX
-    }
-
-    SCENE_STATE sceneState;
     public bool IsNewBie { get; set; } = true;
     Vector3 startPos;
     bool isSelected = false;
@@ -41,7 +33,7 @@ public class Unit : MonoBehaviour
     {
         if(isStart == true)
         {
-            sceneState = SCENE_STATE.BATTLE;
+            GameManager.Instance.sceneState = SCENE_STATE.BATTLE;
             state = STATE.IDLE;
             StartCoroutine("State_" + state);
         }
@@ -52,7 +44,6 @@ public class Unit : MonoBehaviour
     {
         GameManager.Instance.AddUnit(this);
         curHP = MyData.MaxHp;
-        sceneState = SCENE_STATE.ASSIGN;
         ani = GetComponent<Animator>();
         RenColor = gameObject.GetComponent<SpriteRenderer>();
         startColor = RenColor.color;
@@ -64,7 +55,6 @@ public class Unit : MonoBehaviour
     void Start()
     {
         MyPos = gameObject.transform.position;
-        GameManager.Instance.IsStart += IsStart;
         gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(gameObject.transform.position));
         startPos = gameObject.transform.position;
     }
@@ -83,7 +73,8 @@ public class Unit : MonoBehaviour
     #region 유닛 배치 상태
     public void SetClicked(int mouse)
     {
-        if (sceneState != SCENE_STATE.ASSIGN)
+        if (GameManager.Instance.sceneState != SCENE_STATE.ASSIGN
+            && GameManager.Instance.sceneState != SCENE_STATE.SHOP)
             return;
 
         if (mouse == 0)
@@ -106,7 +97,8 @@ public class Unit : MonoBehaviour
 
     public void Matched(string name)
     {
-        if (sceneState != SCENE_STATE.ASSIGN)
+        if (GameManager.Instance.sceneState != SCENE_STATE.ASSIGN
+            && GameManager.Instance.sceneState != SCENE_STATE.SHOP)
             return;
 
         if (MouseControll.Instance.mousePos == GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(gameObject.transform.position)))
@@ -200,7 +192,6 @@ public class Unit : MonoBehaviour
                 gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(gameObject.transform.position));
                 ani.SetBool("IsRun", false);
                 RenColor.flipX = false;
-                sceneState = SCENE_STATE.ASSIGN;
                 GameManager.Instance.SendMessage("RequestIsStart", false, SendMessageOptions.DontRequireReceiver);
                 yield break;
             }
@@ -217,6 +208,9 @@ public class Unit : MonoBehaviour
         if (targetMonster == null)
         {
             StopAllCoroutines();
+            if(GameManager.Instance.sceneState != SCENE_STATE.SHOP)
+                GameManager.Instance.sceneState = SCENE_STATE.SHOP;
+
             StartCoroutine(MoveToStartPos());
         }
         else
@@ -294,6 +288,7 @@ public class Unit : MonoBehaviour
 
     IEnumerator State_DEATH()
     {
+        DisConnectDelegate();
         ani.SetTrigger("IsDeath");
         yield return null;
     }

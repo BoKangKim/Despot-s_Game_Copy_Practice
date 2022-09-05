@@ -69,7 +69,17 @@ public class Monster : MonoBehaviour
     {
         while (state == STATE.MOVE)
         {
+            if (targetUnit.Death == true)
+            {
+                if (targetUnit == null)
+                {
+                    TransferState(STATE.IDLE);
+                    yield break;
+                }
+            }
+
             Vector3 dirVector = (targetUnit.transform.position - gameObject.transform.position).normalized;
+
             gameObject.transform.Translate(dirVector * MyData.MoveSpeed * Time.deltaTime);
 
 

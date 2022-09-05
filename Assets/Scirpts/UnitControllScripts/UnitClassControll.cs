@@ -20,9 +20,10 @@ public class UnitClassControll : MonoBehaviour
         {
             int rndIdx = Random.Range(0,9);
             obj = Instantiate(GameManager.Instance.GetUnitPrefab(rndIdx));
-            obj.gameObject.SetActive(true);
             obj.gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(new Vector3Int(2 + i + count, 1));
             obj.MyIndex = rndIdx;
+            obj.IsNovice = false;
+            obj.gameObject.SetActive(true);
             units.Add(obj);
             count++;
         }
@@ -30,7 +31,7 @@ public class UnitClassControll : MonoBehaviour
         obj = Instantiate(GameManager.Instance.GetUnitPrefab(GameManager.Instance.UnitClassCount() - 1));
         obj.MyIndex = unitMaxIdx;
         obj.gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(new Vector3Int(2 , -1));
-        obj.IsNovice = true;
+        
         obj.gameObject.SetActive(true);
         units.Add(obj);
         count++;

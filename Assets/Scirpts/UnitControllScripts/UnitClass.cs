@@ -8,7 +8,7 @@ public class UnitClass : MonoBehaviour
     bool isMatched = false;
     public int MyIndex { get; set; } = -1;
     bool isStart = false;
-    public bool IsNovice { get; set; } = false;
+    public bool IsNovice { get; set; } = true;
     int myCost;
     
     void IsStart(bool isStart)
@@ -26,10 +26,11 @@ public class UnitClass : MonoBehaviour
 
     void Update()
     {
-        if (isStart == true)
+        if (GameManager.Instance.sceneState != SCENE_STATE.SHOP)
+        {
             return;
-
-        if(MouseControll.Instance.IsClicked == false
+        }
+        if (MouseControll.Instance.IsClicked == false
             && MouseControll.Instance.IsDrag == false
             && isMatched == false)
         {
@@ -56,9 +57,10 @@ public class UnitClass : MonoBehaviour
             && MouseControll.Instance.IsDrag == false)
         {
             gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(gameObject.transform.position));
-            if(gameObject.transform.position == MouseControll.Instance.GetUnitPos())
+
+            if (gameObject.transform.position == MouseControll.Instance.GetUnitPos())
             {
-                if(MouseControll.Instance.MatchUnit.IsNewBie == true &&
+                if (MouseControll.Instance.MatchUnit.IsNewBie == true &&
                     GameManager.Instance.coinCount >= myCost
                     && IsNovice == false)
                 {
