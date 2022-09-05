@@ -119,6 +119,11 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    public int UnitListCount()
+    {
+        return units.Count;
+    }
+
     public void AddMonster(Monster monster)
     {
         monsters.Add(monster);
@@ -140,6 +145,11 @@ public class GameManager : Singleton<GameManager>
         {
             monsters[i].myIdx = i;
         }
+    }
+
+    public int GetMonsterListCount()
+    {
+        return monsters.Count;
     }
 
     #endregion

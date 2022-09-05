@@ -6,7 +6,7 @@ public class FirePoint : MonoBehaviour
 {
     [SerializeField] AttackFire FireObjects;
     ObjectPool<AttackFire> MyInstance = null;
-
+    Unit myUnit = null;
     private void Awake()
     {
         if(FireObjects.name == "Arrow")
@@ -14,19 +14,29 @@ public class FirePoint : MonoBehaviour
             ArrowPool.Instance.preFab = FireObjects;
             MyInstance = ArrowPool.Instance;
         }
+        else if(FireObjects.name == "Gun")
+        {
+            GunPool.Instance.preFab = FireObjects;
+            MyInstance = GunPool.Instance;
+        }else if(FireObjects.name == "SuckerBullet")
+        {
+            SuckerPool.Instance.preFab = FireObjects;
+            MyInstance = SuckerPool.Instance;
+        }
 
-        Unit unit = gameObject.GetComponentInParent<Unit>();
-        if (unit != null)
-            unit.fire = Fire;
+        myUnit = gameObject.GetComponentInParent<Unit>();
+        if (myUnit != null)
+            myUnit.fire = Fire;
     }
     
-    public void Fire(Monster target,Transform unitTrans)
+    public void Fire(Monster target)
     {
         AttackFire af = MyInstance.Get();
         af.gameObject.transform.SetParent(MyInstance.transform);
-        af.gameObject.transform.position = unitTrans.position + new Vector3(0.1f,0.01f,0f);
+        af.gameObject.transform.position = gameObject.transform.position;
         af.tarGet = target;
         af.release = Release;
+        af.MyUnitData = myUnit.GetUnitData();
         af.StartCoroutine(af.Fire());
     }
 

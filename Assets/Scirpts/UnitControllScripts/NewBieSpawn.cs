@@ -5,7 +5,7 @@ using UnityEngine;
 public class NewBieSpawn : MonoBehaviour
 {
     GameObject NewbieBox = null;
-    int startNew = 3;
+    int startNew = 4;
     int cost = 1;
 
     private void Awake()
@@ -16,18 +16,28 @@ public class NewBieSpawn : MonoBehaviour
 
     private void Start()
     {
-        for(int i = 0;i < startNew; i++)
-        {
-            Unit unit = Instantiate(GameManager.Instance.characterPrefab[i]);
-            unit.gameObject.transform.position = new Vector3(-11.5f,(float)i,0);
-            unit.gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(unit.gameObject.transform.position));
-            unit.transform.SetParent(NewbieBox.transform,false);
+        CreateStartUnit();
+    }
 
-            if(i != GameManager.Instance.characterPrefab.Length - 1)
-            {
-                unit.IsNewBie = false;
-            }
-        }
+    private void CreateStartUnit()
+    {
+        Unit unit = Instantiate(GameManager.Instance.characterPrefab[0]);
+        unit.gameObject.transform.position = new Vector3(-11.5f, -3f, 0);
+        unit.gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(unit.gameObject.transform.position));
+        unit.transform.SetParent(NewbieBox.transform, false);
+        unit.IsNewBie = false;
+
+        unit = Instantiate(GameManager.Instance.characterPrefab[5]);
+        unit.gameObject.transform.position = new Vector3(-11.5f, -2f, 0);
+        unit.gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(unit.gameObject.transform.position));
+        unit.transform.SetParent(NewbieBox.transform, false);
+        unit.IsNewBie = false;
+
+        unit = Instantiate(GameManager.Instance.characterPrefab[9]);
+        unit.gameObject.transform.position = new Vector3(-11.5f, -1f, 0);
+        unit.gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(unit.gameObject.transform.position));
+        unit.transform.SetParent(NewbieBox.transform, false);
+
         
     }
 

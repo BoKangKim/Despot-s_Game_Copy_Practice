@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void Fire(Monster target,Transform unitTrans);
+public delegate void Fire(Monster target);
 public class Unit : MonoBehaviour
 {
     enum SCENE_STATE
@@ -33,6 +33,10 @@ public class Unit : MonoBehaviour
     public float curHP { get; set; }
     STATE state;
 
+    public ScriptableUnit GetUnitData()
+    {
+        return MyData;
+    }
     void IsStart(bool isStart)
     {
         if(isStart == true)
@@ -173,7 +177,7 @@ public class Unit : MonoBehaviour
 
     void TransferState(STATE Nextstate)
     {
-        StopCoroutine("State_" + state);
+        StopAllCoroutines();
         state = Nextstate;
         StartCoroutine("State_" + state);
     }
@@ -228,6 +232,15 @@ public class Unit : MonoBehaviour
 
         while (state == STATE.MOVE)
         {
+            if (targetMonster.Death == true)
+            {
+                if (targetMonster == null)
+                {
+                    TransferState(STATE.IDLE);
+                    yield break;
+                }
+            }
+
             Vector3 dirVector = (targetMonster.transform.position - gameObject.transform.position).normalized;
             if (targetMonster.transform.position.x < gameObject.transform.position.x)
             {
@@ -288,7 +301,7 @@ public class Unit : MonoBehaviour
     public void AttackMonster()
     {
         if (fire != null)
-            fire(targetMonster,gameObject.transform);
+            fire(targetMonster);
         else
         {
             if (targetMonster != null)

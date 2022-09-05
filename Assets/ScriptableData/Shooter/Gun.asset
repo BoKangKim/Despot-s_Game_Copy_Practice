@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fddb24a2e5ee2664e8c2068b0a49a12c, type: 3}
-  m_Name: StoneSword
+  m_Name: Gun
   m_EditorClassIdentifier: 
-  MoveSpeed: 3
-  AttackDamage: 5
-  AttackRange: 1
-  AttackSpeed: 1
-  MaxHp: 15
+  MoveSpeed: 4
+  AttackDamage: 3
+  AttackRange: 8
+  AttackSpeed: 0.5
+  MaxHp: 7

@@ -8,9 +8,16 @@ public class AttackFire : MonoBehaviour
 {
     public Monster tarGet { get; set; }
     protected float speed = 3f;
+    float AttackPower = 0f;
     public ReleaseThis release;
-    [SerializeField] ScriptableUnit MyData;
-   
+    [SerializeField] ScriptableBullet MyData;
+    [HideInInspector] public ScriptableUnit MyUnitData;
+
+    private void OnEnable()
+    {
+        if(MyUnitData != null)
+            AttackPower = MyUnitData.AttackDamage;
+    }
 
     public IEnumerator Fire()
     {
@@ -22,14 +29,14 @@ public class AttackFire : MonoBehaviour
             if (tarGet != null)
                 dir = (tarGet.transform.position - gameObject.transform.position).normalized;
 
-            gameObject.transform.Translate(dir * 10f * Time.deltaTime);
+            gameObject.transform.Translate(dir * MyData.Speed * Time.deltaTime);
 
             if (Vector3.Distance(tarGet.transform.position, gameObject.transform.position) <= 0.1f)
             {
                 if (release != null)
                 {
                     if (tarGet != null)
-                        tarGet.SendMessage("TransferHP", MyData.AttackDamage, SendMessageOptions.DontRequireReceiver);
+                        tarGet.SendMessage("TransferHP",AttackPower ,SendMessageOptions.DontRequireReceiver);
                     release(this);
                     yield break;
                 }
