@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Monster
   - Unit
+  - Floor
+  - Minimap
   layers:
   - Default
   - TransparentFX

@@ -28,7 +28,6 @@ public class GameManager : Singleton<GameManager>
     public int foodCount { get; set; }
     public SetActiveButton sab;
 
-
     [Header("À¯´Ö Á¤º¸")]
     [SerializeField] UnitClass[] unitPrefab;
     public Unit[] characterPrefab;
@@ -44,7 +43,9 @@ public class GameManager : Singleton<GameManager>
     [Header("¸Ê Á¤º¸")]
     public StartScroll scroll;
     public SCENE_STATE sceneState { get; set; } = SCENE_STATE.ASSIGN;
-
+    MonsterSpawn monSpawn;
+    FoodShop food;
+    public int mapCount = -1;
 
     public void StartScrollCoroutine()
     {
@@ -56,22 +57,27 @@ public class GameManager : Singleton<GameManager>
         ChangeFoodText(-units.Count);
         for(int i = 0; i < units.Count; i++)
         {
+            if (units[i] == null)
+                RemoveUnit(i);
             units[i].gameObject.SetActive(false);
         }
         if (scroll != null)
             scroll();
-            }
+    }
 
     public void SetActiveTrueUnit()
     {
+        if (sceneState == SCENE_STATE.ASSIGN)
+            return;
         for(int i = 0; i < units.Count; i++)
         {
             units[i].gameObject.SetActive(true);
         }
+        monSpawn.SendMessage("CreateRndSpawnPoint",SendMessageOptions.DontRequireReceiver);
         if(sab != null)
             sab();
     }
-
+    
     void RequestIsStart(bool isStart)
     {
         this.isStart = isStart;
@@ -84,20 +90,23 @@ public class GameManager : Singleton<GameManager>
         return floorTileMap;
     }
 
+
     #region MonoBeHavior
     private void Awake()
     {
-        coinCount = 20;
+        coinCount = 220;
         unitCount = 0;
         foodCount = 40;
         CoinCount.text = (coinCount).ToString();
         UnitCount.text = (unitCount).ToString();
         FoodCount.text = (foodCount).ToString();
         sceneState = SCENE_STATE.ASSIGN;
-        
+
+        food = FindObjectOfType<FoodShop>();
         units = new List<Unit>();
         monsters = new List<Monster>();
         dc = FindObjectOfType<DoorControll>();
+        monSpawn = FindObjectOfType<MonsterSpawn>();
         DontDestroyOnLoad(this);
     }
 
@@ -211,12 +220,16 @@ public class GameManager : Singleton<GameManager>
         int resultIdx = 0;
         float distance = 0;
 
+        if (unit == null)
+            return null;
         distance = Vector3.Distance(unit.transform.position,monsters[0].gameObject.transform.position);
         
         if(monsters.Count > 1)
         {
             for (int i = 0; i < monsters.Count; i++)
             {
+                if (monsters[i] == null)
+                    continue;
                 float temp = Vector3.Distance(unit.transform.position, monsters[i].gameObject.transform.position);
 
                 if (distance > temp)
@@ -237,11 +250,15 @@ public class GameManager : Singleton<GameManager>
 
         int resultIdx = 0;
         float distance = 0f;
+        if (monster == null)
+            return null;
 
         distance = Vector3.Distance(monster.transform.position, units[0].gameObject.transform.position);
 
         for (int i = 0; i < units.Count; i++)
         {
+            if (units[i] == null)
+                continue;
             float temp = Vector3.Distance(monster.transform.position, units[i].gameObject.transform.position);
             
             if (distance > temp)

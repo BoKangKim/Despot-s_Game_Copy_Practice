@@ -1098,7 +1098,7 @@ GameObject:
   - component: {fileID: 2369120492110653150}
   m_Layer: 0
   m_Name: MoveFloor
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10966,6 +10966,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d32a13bc41259aa4c9485aea92a2a65b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  info: 0
+  minimapTile:
+  - {fileID: 2629411350556720167, guid: 47632a18fe7eefd4abbf7d6387805fac, type: 3}
+  - {fileID: 5505924758013297068, guid: b4c7cb07adb3e224cad527049728fe6b, type: 3}
+  - {fileID: 8885666386777485505, guid: 93556e219b45ebb4cadc1f50e9efa4c8, type: 3}
+  - {fileID: 1610931371340214497, guid: f71bc4034fd74784c828a5c0195f1e6a, type: 3}
+  imgs:
+  - {fileID: 21300000, guid: 642798916ece51540a7ee40de19ac788, type: 3}
+  - {fileID: 21300000, guid: f51f5be710f9c41478a78bdaf9fbb99d, type: 3}
+  - {fileID: 21300000, guid: b629a584b0ce07949b1f618c3d66baf0, type: 3}
+  - {fileID: 21300000, guid: 543bb06776e046b4581bee77379cc4c8, type: 3}
 --- !u!1 &2369120493568558811
 GameObject:
   m_ObjectHideFlags: 0

@@ -54,20 +54,21 @@ public class Unit : MonoBehaviour
 
     void Start()
     {
+        myIdx = GameManager.Instance.GetMyIdx();
         MyPos = gameObject.transform.position;
         gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(gameObject.transform.position));
         startPos = gameObject.transform.position;
     }
 
-    private void OnEnable()
-    {
-        myIdx = GameManager.Instance.GetMyIdx();
-    }
-
     private void OnDestroy()
     {
         if(Death == true)
+        {
             GameManager.Instance.RemoveUnit(myIdx);
+            GameManager.Instance.IsStart -= IsStart;
+            MouseControll.Instance.setClicked -= SetClicked;
+            MouseControll.Instance.Match -= Matched;
+        }
     }
 
     #region 유닛 배치 상태

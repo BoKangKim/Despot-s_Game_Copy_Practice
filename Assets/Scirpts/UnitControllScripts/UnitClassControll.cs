@@ -23,10 +23,20 @@ public class UnitClassControll : MonoBehaviour
         DestroyList();
     }
 
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            count = 0;
+            DestroyList();
+            CreateList();
+            GameManager.Instance.ChangeCoinText(-2);
+        }
+    }
+
     private void CreateList()
     {
         UnitClass obj = null;
-        Debug.Log(unitMaxIdx);
         for (int i = 0; i < unitMaxIdx; i++)
         {
             int rndIdx = Random.Range(0, 9);
