@@ -10,6 +10,7 @@ public enum SCENE_STATE
     BATTLE,
     SHOP,
     SCROLL,
+    END,
     MAX
 }
 
@@ -23,6 +24,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] Text CoinCount;
     [SerializeField] Text UnitCount;
     [SerializeField] Text FoodCount;
+    [SerializeField] GameObject Screen;
+    [SerializeField] GameObject Button;
     public int coinCount { get; set; }
     public int unitCount { get; set; }
     public int foodCount { get; set; }
@@ -107,7 +110,6 @@ public class GameManager : Singleton<GameManager>
         monsters = new List<Monster>();
         dc = FindObjectOfType<DoorControll>();
         monSpawn = FindObjectOfType<MonsterSpawn>();
-        DontDestroyOnLoad(this);
     }
 
     #endregion
@@ -163,16 +165,22 @@ public class GameManager : Singleton<GameManager>
 
     public void RemoveUnit(int idx)
     {
-        if (units.Count == 0)
-            return;
 
         units.RemoveAt(idx);
-
         ChangeUnitText(-1);
+
+        if (units.Count == 0)
+        {
+            Button.gameObject.SetActive(true);
+            Screen.gameObject.SetActive(true);
+            sceneState = SCENE_STATE.END;
+            return;
+        }
         for (int i = 0; i < units.Count; i++)
         {
             units[i].myIdx = i;
         }
+
     }
 
     public int UnitListCount()
@@ -222,8 +230,12 @@ public class GameManager : Singleton<GameManager>
 
         if (unit == null)
             return null;
-        distance = Vector3.Distance(unit.transform.position,monsters[0].gameObject.transform.position);
-        
+
+        if (monsters[0] != null)
+            distance = Vector3.Distance(unit.transform.position,monsters[0].gameObject.transform.position);
+        else
+            return null;
+
         if(monsters.Count > 1)
         {
             for (int i = 0; i < monsters.Count; i++)
@@ -253,7 +265,10 @@ public class GameManager : Singleton<GameManager>
         if (monster == null)
             return null;
 
-        distance = Vector3.Distance(monster.transform.position, units[0].gameObject.transform.position);
+        if (units[0] != null)
+            distance = Vector3.Distance(monster.transform.position, units[0].gameObject.transform.position);
+        else
+            return null;
 
         for (int i = 0; i < units.Count; i++)
         {

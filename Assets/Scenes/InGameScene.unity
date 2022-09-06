@@ -283,7 +283,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpawnArea: {fileID: 7107316892126850023, guid: 7a9a5399eba1bf442865b04d3e72fa97, type: 3}
-  Monster: {fileID: 1606826726287782661, guid: 2d558784b10db414ba750689a28e83aa, type: 3}
+  Monster:
+  - {fileID: 1606826726287782661, guid: 2d558784b10db414ba750689a28e83aa, type: 3}
+  - {fileID: 7870489390067532900, guid: 15421d639133ee747ad53999abc19a09, type: 3}
 --- !u!4 &215819425
 Transform:
   m_ObjectHideFlags: 0
@@ -626,7 +628,7 @@ Transform:
   m_GameObject: {fileID: 707901652}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 8, y: 7, z: 1}
+  m_LocalScale: {x: 4, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 792242483}
@@ -794,6 +796,50 @@ Transform:
   - {fileID: 1343140390}
   m_Father: {fileID: 0}
   m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &806419718
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 806419720}
+  - component: {fileID: 806419719}
+  m_Layer: 0
+  m_Name: ButtonEvent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &806419719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806419718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb61b25f6955849498742267faadec15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &806419720
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806419718}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1026092469
 GameObject:
@@ -1003,7 +1049,7 @@ GameObject:
   - component: {fileID: 1148537319}
   - component: {fileID: 1148537318}
   m_Layer: 5
-  m_Name: Home
+  m_Name: Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1073,7 +1119,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1148537319}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 806419719}
+        m_TargetAssemblyTypeName: ButtonEvent, Assembly-CSharp
+        m_MethodName: ExitButtonEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1148537319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1491,7 +1549,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1471390238}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 806419719}
+        m_TargetAssemblyTypeName: ButtonEvent, Assembly-CSharp
+        m_MethodName: StartButtonEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1471390238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1601,7 +1671,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: HOME
+  m_Text: EXIT
 --- !u!222 &1610014419
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1715,6 +1785,8 @@ MonoBehaviour:
   CoinCount: {fileID: 146008035}
   UnitCount: {fileID: 2127583125}
   FoodCount: {fileID: 1972067911}
+  Screen: {fileID: 792242482}
+  Button: {fileID: 806419718}
   unitPrefab:
   - {fileID: 2446959420302112603, guid: 651f19d82de9dcf45955965ca34b2460, type: 3}
   - {fileID: -4551830835537591634, guid: 4573634465ee0dc4f8c31766ade6bbb6, type: 3}

@@ -5,7 +5,7 @@ using UnityEngine;
 public class MonsterSpawn : MonoBehaviour
 {
     [SerializeField] GameObject SpawnArea;
-    [SerializeField] GameObject Monster;
+    [SerializeField] GameObject[] Monster;
     GameObject MonsterSpanwBox = null;
     List<Vector3> spawnPosList;
     List<GameObject> spawnList;
@@ -32,7 +32,7 @@ public class MonsterSpawn : MonoBehaviour
 
         for(int i = 0; i < spawnPosList.Count; i++)
         {
-            GameObject monster = Instantiate(Monster, spawnPosList[i], Quaternion.identity);
+            GameObject monster = Instantiate(Monster[GameManager.Instance.mapCount], spawnPosList[i], Quaternion.identity);
             monster.transform.SetParent(MonsterSpanwBox.transform, true);
 
             Destroy(spawnList[i].gameObject);
