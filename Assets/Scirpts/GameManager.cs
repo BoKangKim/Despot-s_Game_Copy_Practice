@@ -15,7 +15,7 @@ public enum SCENE_STATE
 }
 
 public delegate void SetIsStart(bool isStart);
-public delegate void StartScroll();
+public delegate void StartScroll(int dir);
 public delegate void SetActiveButton();
 
 public class GameManager : Singleton<GameManager>
@@ -34,21 +34,25 @@ public class GameManager : Singleton<GameManager>
     [Header("À¯´Ö Á¤º¸")]
     [SerializeField] UnitClass[] unitPrefab;
     public Unit[] characterPrefab;
-    [SerializeField] Tilemap floorTileMap;
+    public Tilemap floorTileMap { get; set; }
     DoorControll dc;
     bool isStart = false;
     public SetIsStart IsStart = null;
     [SerializeField] GameObject unitClassManger;
+    [SerializeField] GameObject foodShop;
+    public GameObject UnitBox;
 
     List<Monster> monsters = null;
     List<Unit> units = null;
 
     [Header("¸Ê Á¤º¸")]
+    [SerializeField] GameObject floor;
     public StartScroll scroll;
     public SCENE_STATE sceneState { get; set; } = SCENE_STATE.ASSIGN;
     MonsterSpawn monSpawn;
     FoodShop food;
     public int mapCount = -1;
+    public int dir { get; set; } = -1;
 
     public void StartScrollCoroutine()
     {
@@ -56,16 +60,19 @@ public class GameManager : Singleton<GameManager>
             return;
 
         unitClassManger.SetActive(false);
+        foodShop.SetActive(false);
+        floor.SetActive(false);
         sceneState = SCENE_STATE.SCROLL;
         ChangeFoodText(-units.Count);
         for(int i = 0; i < units.Count; i++)
         {
             if (units[i] == null)
                 RemoveUnit(i);
+
             units[i].gameObject.SetActive(false);
         }
         if (scroll != null)
-            scroll();
+            scroll(dir);
     }
 
     public void SetActiveTrueUnit()
@@ -76,6 +83,7 @@ public class GameManager : Singleton<GameManager>
         {
             units[i].gameObject.SetActive(true);
         }
+        floor.SetActive(true);
         monSpawn.SendMessage("CreateRndSpawnPoint",SendMessageOptions.DontRequireReceiver);
         if(sab != null)
             sab();
@@ -83,6 +91,10 @@ public class GameManager : Singleton<GameManager>
     
     void RequestIsStart(bool isStart)
     {
+        if (isStart == true)
+            floor.SetActive(false);
+        else if (isStart == false)
+            floor.SetActive(true);
         this.isStart = isStart;
         if (IsStart != null)
             IsStart(isStart);
@@ -105,6 +117,8 @@ public class GameManager : Singleton<GameManager>
         FoodCount.text = (foodCount).ToString();
         sceneState = SCENE_STATE.ASSIGN;
 
+        UnitBox = new GameObject("UnitBox");
+        UnitBox.transform.position = Vector3.zero;
         food = FindObjectOfType<FoodShop>();
         units = new List<Unit>();
         monsters = new List<Monster>();
@@ -165,6 +179,8 @@ public class GameManager : Singleton<GameManager>
 
     public void RemoveUnit(int idx)
     {
+        if (units.Count == 0)
+            return;
 
         units.RemoveAt(idx);
         ChangeUnitText(-1);

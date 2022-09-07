@@ -49,20 +49,19 @@ public class MouseControll : Singleton<MouseControll>
 
     private void Update()
     {
-        if (isStart == true)
+        if (GameManager.Instance.sceneState != SCENE_STATE.ASSIGN
+            && GameManager.Instance.sceneState != SCENE_STATE.SHOP)
             return;
 
         if (Input.GetMouseButtonDown(0))
         {
             PreUnit = null;
             ClickedUnitClass = null;
-            if (IsClicked == false && clickCount == 0)
+            if (clickCount == 0)
                 IsClicked = true;
-
             clickCount++;
             TransferMousePos();
-            
-            if(setClicked != null)
+            if (setClicked != null)
                 setClicked(0);
         }
         else if (Input.GetMouseButtonDown(1))
@@ -83,50 +82,47 @@ public class MouseControll : Singleton<MouseControll>
             }
 
         }
-    }
-
-
-    private void OnMouseDrag()
-    {
-        if (isStart == true)
-            return;
-
-        if (IsClicked == true)
-            return;
-
-        if(IsDrag == false)
-            IsDrag = true;
-
-        mousePos = Input.mousePosition;
-        mousePos = myCamera.ScreenToWorldPoint(mousePos);
-    }
-
-    private void OnMouseUp()
-    {
-        if (isStart == true)
-            return;
-        
-
-        MatchUnit = null;
-        IsClicked = false;
-        clickCount = 0;
-        IsDrag = false;
-        mousePos = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(mousePos));
-        if (Match != null)
-            Match("MatchUnit");
-
-        if (ClickedUnitClass == null)
-            return;
-        if (ClickedUnitClass.IsNovice == true)
+        else if (Input.GetMouseButtonUp(0))
         {
-            if (mousePos.x <= -5.5f && mousePos.x >= -11.5f
-                    && mousePos.y >= -4.5f && mousePos.y <= 2.5f)
+            if (GameManager.Instance.sceneState != SCENE_STATE.ASSIGN
+            && GameManager.Instance.sceneState != SCENE_STATE.SHOP)
+                return;
+
+
+            MatchUnit = null;
+            IsClicked = false;
+            clickCount = 0;
+            IsDrag = false;
+            mousePos = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(mousePos));
+            if (Match != null)
+                Match("MatchUnit");
+
+            if (ClickedUnitClass == null)
+                return;
+            if (ClickedUnitClass.IsNovice == true)
             {
-                if (MatchUnit == null)
-                    newbieSpwan.SendMessage("CreateNewBie",mousePos,SendMessageOptions.RequireReceiver);
+                if (mousePos.x <= -5.5f && mousePos.x >= -11.5f
+                        && mousePos.y >= -4.5f && mousePos.y <= 2.5f)
+                {
+                    if (MatchUnit == null)
+                        newbieSpwan.SendMessage("CreateNewBie", mousePos, SendMessageOptions.RequireReceiver);
+                }
             }
         }
+        else if (Input.GetMouseButton(0))
+        {
+            if (isStart == true)
+                return;
 
+            if (IsClicked == true)
+                return;
+
+            if (IsDrag == false)
+                IsDrag = true;
+
+            mousePos = Input.mousePosition;
+            mousePos = myCamera.ScreenToWorldPoint(mousePos);
+        }
     }
 
     public void TransferMousePos()

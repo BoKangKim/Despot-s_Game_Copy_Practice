@@ -5,7 +5,7 @@ using UnityEngine;
 public delegate void Fire(Monster target);
 public class Unit : MonoBehaviour
 {
-    public bool IsNewBie { get; set; } = true;
+    public bool IsNewBie { get; set; } = false;
     Vector3 startPos;
     bool isSelected = false;
     Color startColor;

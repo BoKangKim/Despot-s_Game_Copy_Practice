@@ -7,7 +7,6 @@ public class FightButtonEvent : MonoBehaviour
     SpriteRenderer sprite;
     UnitClassControll unitClassControll = null;
     [SerializeField] Sprite buttonImg;
-    GameObject[] Floors = null;
     [SerializeField] MonsterSpawn spawn;
     [SerializeField] GameObject[] mapInfo;
     Sprite startImg = null;
@@ -20,16 +19,11 @@ public class FightButtonEvent : MonoBehaviour
             return;
 
         this.isStart = isStart;
-        for(int i = 0; i < Floors.Length; i++)
-        {
-            Floors[i].SetActive(true);
-        }
         mapInfo[GameManager.Instance.mapCount].SetActive(true);
     }
 
     private void Awake()
     {
-        Floors = GameObject.FindGameObjectsWithTag("Floor");
         GameManager.Instance.IsStart += IsStart;
         GameManager.Instance.sab = SetActiveButton;
         unitClassControll = FindObjectOfType<UnitClassControll>();
@@ -48,10 +42,7 @@ public class FightButtonEvent : MonoBehaviour
         isStart = true;
         GameManager.Instance.SendMessage("RequestIsStart",isStart,SendMessageOptions.DontRequireReceiver);
         sprite.sprite = buttonImg;
-        for (int i = 0; i < Floors.Length; i++)
-        {
-            Floors[i].SetActive(false);
-        }
+        
         if (unitClassControll != null)
         {
             unitClassControll.SendMessage("DestroyList",SendMessageOptions.RequireReceiver);

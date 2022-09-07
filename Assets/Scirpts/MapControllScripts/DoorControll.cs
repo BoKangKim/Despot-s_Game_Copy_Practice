@@ -6,6 +6,8 @@ public class DoorControll : MonoBehaviour
 {
     Animator myAnimator;
     bool isStart = false;
+    int dir = -1;
+
 
     void IsStart(bool isStart)
     {
@@ -15,6 +17,23 @@ public class DoorControll : MonoBehaviour
     private void Awake()
     {
         myAnimator = GetComponent<Animator>();
+        if(gameObject.tag == "Top")
+        {
+            dir = 0;
+        }
+        else if (gameObject.tag == "Right")
+        {
+            dir = 1;
+        }
+        else if (gameObject.tag == "Bottom")
+        {
+            dir = 2;
+        }
+        else if (gameObject.tag == "Left")
+        {
+            dir = 3;
+        }
+
     }
 
     private void Start()
@@ -49,6 +68,7 @@ public class DoorControll : MonoBehaviour
         if (GameManager.Instance.sceneState != SCENE_STATE.SHOP)
             return;
 
+        GameManager.Instance.dir = dir;
         GameManager.Instance.StartScrollCoroutine();
     }
 

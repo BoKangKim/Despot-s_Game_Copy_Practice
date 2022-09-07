@@ -15,5 +15,5 @@ MonoBehaviour:
   MoveSpeed: 6
   AttackDamage: 2
   AttackRange: 1
-  AttackSpeed: 1.5
+  AttackSpeed: 0.5
   MaxHp: 10

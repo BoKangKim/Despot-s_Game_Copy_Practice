@@ -8,6 +8,10 @@ TagManager:
   - Unit
   - Floor
   - Minimap
+  - Top
+  - Bottom
+  - Right
+  - Left
   layers:
   - Default
   - TransparentFX

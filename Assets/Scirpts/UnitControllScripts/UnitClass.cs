@@ -10,7 +10,8 @@ public class UnitClass : MonoBehaviour
     bool isStart = false;
     public bool IsNovice { get; set; } = true;
     int myCost;
-    
+
+
     void IsStart(bool isStart)
     {
         this.isStart = isStart;
@@ -22,7 +23,10 @@ public class UnitClass : MonoBehaviour
         myCost = int.Parse(cost.text);
         GameManager.Instance.IsStart += IsStart;
         startPos = gameObject.transform.position;
+        MouseControll.Instance.IsClicked = false;
+        MouseControll.Instance.IsDrag = false;
     }
+
 
     void Update()
     {
@@ -35,13 +39,13 @@ public class UnitClass : MonoBehaviour
             && isMatched == false)
         {
             return;
-        }    
+        }
 
-        if(MouseControll.Instance.IsClicked == true 
+
+        if (MouseControll.Instance.IsClicked == true 
             && MouseControll.Instance.mousePos == gameObject.transform.position)
         {
             gameObject.transform.position = MouseControll.Instance.mousePos;
-
             isMatched = true;
             MouseControll.Instance.IsClassMatch = true;
             MouseControll.Instance.IsClicked = false;
@@ -49,7 +53,7 @@ public class UnitClass : MonoBehaviour
         }
         else if (isMatched == true 
             && MouseControll.Instance.IsDrag == true 
-            && MouseControll.Instance.IsClicked == false)
+            )
         {
             gameObject.transform.position = MouseControll.Instance.mousePos - new Vector3(0,0,MouseControll.Instance.mousePos.z);
         }
@@ -90,7 +94,7 @@ public class UnitClass : MonoBehaviour
         Destroy(MouseControll.Instance.MatchUnit.gameObject);
         MouseControll.Instance.ClickedUnitClass = null;
         MouseControll.Instance.IsClassMatch = false;
-        Instantiate(GameManager.Instance.GetCharacterPrefab(MyIndex), MouseControll.Instance.GetUnitPos(), Quaternion.identity);
+        Instantiate(GameManager.Instance.GetCharacterPrefab(MyIndex), MouseControll.Instance.GetUnitPos(), Quaternion.identity,GameManager.Instance.UnitBox.transform);
         MouseControll.Instance.MatchUnit = null;
         Destroy(gameObject);
     }

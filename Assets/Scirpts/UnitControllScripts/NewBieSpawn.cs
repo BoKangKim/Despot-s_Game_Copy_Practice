@@ -35,8 +35,8 @@ public class NewBieSpawn : MonoBehaviour
             unit.gameObject.transform.position = new Vector3(-11.5f + countx, 1.5f - county, 0);
             unit.gameObject.transform.position = GameManager.Instance.GetTileMap().GetCellCenterLocal(Vector3Int.FloorToInt(unit.gameObject.transform.position));
             unit.transform.SetParent(NewbieBox.transform, false);
-            if(i != startNew - 1)
-                unit.IsNewBie = false;
+            if(i == GameManager.Instance.characterPrefab.Length - 1)
+                unit.IsNewBie = true;
 
             county++;
             if (i == 4)
@@ -57,6 +57,7 @@ public class NewBieSpawn : MonoBehaviour
         Unit unit = Instantiate(GameManager.Instance.characterPrefab[GameManager.Instance.characterPrefab.Length - 1]);
         unit.gameObject.transform.position = pos;
         unit.transform.SetParent(NewbieBox.transform, false);
+        unit.IsNewBie = true;
         GameManager.Instance.ChangeCoinText(-cost);
     }
 
