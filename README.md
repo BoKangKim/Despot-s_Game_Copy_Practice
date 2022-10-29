@@ -10,6 +10,9 @@ https://docs.google.com/spreadsheets/d/15zbC-AMxAxXnSbOaP9plX3T2hWxa-qjf62g_reki
 # 플레이 영상
 https://youtu.be/eBtJfKZF2KY
 
+# Build 파일
+https://drive.google.com/file/d/1o-oZEA1jZvHcHQDyjWGHFLO7VABKDisb/view?usp=sharing
+
 # Resource 출처
 https://www.tinybuild.com/
 https://konfagames.com/
